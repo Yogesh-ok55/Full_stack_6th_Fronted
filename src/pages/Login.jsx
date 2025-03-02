@@ -1,3 +1,4 @@
+import { form } from "framer-motion/client"
 import React, { useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import { ToastContainer, toast } from "react-toastify"
@@ -16,17 +17,28 @@ export default function Login() {
     setLoading(true)
 
     try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000))
-      console.log("Login data:", formData)
+      
+       const response = await fetch("http://localhost:5000/auth/login",{
+        headers:{
+          "Content-Type":"application/json"
+        },
+        method:"POST",
+        body:JSON.stringify(formData),
+        credentials: "include"
+       })
 
-      // Check if email & password are correct (mock validation)
-      if (formData.email === "test@example.com" && formData.password === "password123") {
+        if(!response.ok){
+          throw new Error(data.message || "Login failed!");
+        }
+
+
+
+       const data = await response.json();
+     
+       console.log(data);
         toast.success("Login successful! 🎉")
         setTimeout(() => navigate("/Dashboard"), 2000)
-      } else {
-        toast.error("Invalid email or password ❌")
-      }
+      
     } catch (error) {
       toast.error("Something went wrong. Please try again. ⚠️")
     } finally {

@@ -18,15 +18,28 @@ export default function Signup() {
   const handleSubmit = async (e) => {
     e.preventDefault()
     setLoading(true)
+    console.log(formData)
 
     // Simulate API call
     try{
-    toast.success("User Registerd Successfully!")
-    await new Promise((resolve) => setTimeout(resolve, 1000))
-    console.log("Signup data:", formData)
-
-    // In a real app, you would make an API call here
+       const response = await fetch("http://localhost:5000/auth/signup",{
+        headers:{
+          "Content-Type":"application/json"
+        },
+        method:"POST",
+        body:JSON.stringify(formData),
+      })
+      
+      if (!response.ok) {
+        throw new Error(data.message || "Registration failed!");
+    }
     
+      const data = await response.json(); // Parse response
+
+        
+
+    toast.success("User Registerd Successfully!")
+    // In a real app, you would make an API call here
     setLoading(false)
     setTimeout(() => navigate("/login"), 2000)
     }
